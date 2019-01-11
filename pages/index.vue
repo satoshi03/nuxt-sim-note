@@ -9,7 +9,7 @@
       sm8
       md6
       offset-md2
-      v-for="(item, index) in notes"
+      v-for="(item, index) in notes.slice().reverse()"
       :key="index"
       >
       <v-card max-width="700px" min-width="300px">

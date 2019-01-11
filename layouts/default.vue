@@ -8,16 +8,17 @@
     <v-toolbar-title class="toolbar-title" v-text="title" @click="toHome()" />
     <v-spacer></v-spacer>
     <v-toolbar-items v-if="isAuthenticated()" class="toolbar-items">
-      <v-avatar class="toolbar-avator" size=38>
+      <v-avatar @click="toggle('logout')" class="toolbar-avator" size=38>
         <img
           :src="user.photoURL"
         />
       </v-avatar>
+      <v-btn v-if="isAuthenticated() && toggleLogout" class="toolbar-button toolbar-login-logout" color="#666666" @click="doLogout" outline>ログアウト</v-btn>
       <v-btn v-if="!isNote()" class="toolbar-button" color="#2cb696" to="note" outline>投稿</v-btn>
       <v-btn v-if="isNote()" class="toolbar-button" color="#2cb696"  @click="publishNote()" outline>公開</v-btn>
     </v-toolbar-items>
     <v-toolbar-items v-if="!isAuthenticated()" class="toolbar-items">
-      <v-btn v-if="!isAuthenticated()" @click="doLogin" flat>LOGIN</v-btn>
+      <v-btn v-if="!isAuthenticated()" class="toolbar-button toolbar-login-logout" color="#2cb696" @click="doLogin" outline>ログイン</v-btn>
     </v-toolbar-items>
     </v-toolbar>
     <v-content>
@@ -35,7 +36,8 @@ import firebase from '~/plugins/firebase'
 export default {
   data() {
     return {
-      title: 'not note'
+      title: 'not note',
+      toggleLogout: false,
     }
   },
   created: function () {
@@ -55,6 +57,11 @@ export default {
     isNote() {
       return this.$route.path == '/note'
     },
+    toggle (button) {
+      if (button == 'logout') {
+        this.toggleLogout = !this.toggleLogout
+      }
+    },
     publishNote() {
       console.log(this.note)
       firebase.database().ref('notes').push(this.note)
@@ -73,6 +80,10 @@ export default {
 </script>
 
 <style>
+* {
+  color: #222222
+}
+
 .toolbar {
   background-color: white;
 }
@@ -96,5 +107,9 @@ export default {
   cursor: pointer;
   margin-left: 15px !important;
   letter-spacing: 0.3em;
+}
+
+.toolbar-login-logout `{
+  letter-spacing: 0.05em !important;
 }
 </style>
