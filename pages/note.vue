@@ -48,6 +48,7 @@ export default {
     applyContentEdit (ev) {
       if (ev.event.target) {
         this.myContent = ev.event.target.innerHTML
+        console.log(ev.event.target.innerHTML)
         this.setCurrentNote()
       }
     },

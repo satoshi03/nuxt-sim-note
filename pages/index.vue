@@ -28,14 +28,15 @@
         />
         <v-card-title class="card-title-panel">
           <div>
-            <div class="card-title">{{ item.note.title }}</div>
+            <a :href="getURL(item.key)"><span class="card-title" v-html="item.note.title"></span></a>
           </div>
         </v-card-title>
         <v-card-text class="card-content-text">
-          {{ getContent(item.note.contents) }}
+          <span v-html="getContent(item.note.contents)">
+          </span>
         </v-card-text>
         <v-card-text class="card-note-link">
-          <a :href="item.note.url">
+          <a :href="getURL(item.key)">
             もっとみる
           </a>
         </v-card-text>
@@ -60,7 +61,7 @@ export default {
   data () {
     return {
       notes: [],
-      maxLength: 100,
+      maxLength: 60,
     }
   },
   created: function () {
@@ -68,7 +69,8 @@ export default {
     this.notesRef = this.database.ref('notes')
     this.notesRef.limitToLast(20).on('child_added', snapshot => {
       const ss = snapshot.val()
-      this.notes.push({
+      console.log(ss)
+      var key = this.notes.push({
         key: ss.key,
         user: ss.user,
         note: ss.note,
@@ -77,11 +79,15 @@ export default {
   },
   methods: {
     getContent (content) {
+      console.log(content)
       if (content.length > this.maxLength) {
         return content.substr(0, this.maxLength) + "..."
       } else {
         return content
       }
+    },
+    getURL (key) {
+      return '/notes?ni=' + key
     }
   }
 }
@@ -111,6 +117,11 @@ export default {
   font-weight: bold;
 }
 
+.card-title-panel a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
 .card-content-text {
   font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", Hiragino Kaku Gothic ProN, "ヒラギノ角ゴ ProN W3", Arial, "メイリオ", Meiryo, sans-serif;
   padding-top: 0px;
@@ -118,6 +129,7 @@ export default {
 
 .card-note-link {
   font-size: 14px;
+  padding-top: 5px;
 }
 
 .card-note-link a {

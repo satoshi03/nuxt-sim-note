@@ -64,9 +64,13 @@ export default {
     },
     publishNote() {
       console.log(this.note)
-      firebase.database().ref('notes').push(this.note)
+      var key = firebase.database().ref('notes').push().key
+      var note = this.note
+      note['key'] = key
+      this.setNote(note)
+      firebase.database().ref('notes/' + key).set(this.note)
     },
-    ...mapActions(['setUser']),
+    ...mapActions(['setUser', 'setNote']),
     ...mapGetters(['isAuthenticated']),
     doLogin() {
       const provider = new firebase.auth.GoogleAuthProvider()
