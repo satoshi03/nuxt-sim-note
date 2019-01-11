@@ -3,6 +3,7 @@ export const strict = false
 export const state = () => ({
   user: null,
   note: null,
+  key: '',
 })
 
 export const mutations = {
@@ -11,6 +12,9 @@ export const mutations = {
   },
   setNote (state, payload) {
     state.note = payload
+  },
+  setKey (state, payload) {
+    state.key = payload
   }
 }
 
@@ -20,6 +24,9 @@ export const actions = {
   },
   setNote ({ commit }, payload) {
     commit('setNote', payload)
+  },
+  setKey ({ commit }, payload) {
+    commit('setKey', payload)
   }
 }
 

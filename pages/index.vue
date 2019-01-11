@@ -1,5 +1,4 @@
-<template>
-  <v-layout
+<template> <v-layout
     wrap
     column
     justify-center
@@ -28,7 +27,7 @@
         />
         <v-card-title class="card-title-panel">
           <div>
-            <a :href="getURL(item.key)"><span class="card-title" v-html="item.note.title"></span></a>
+            <a @click="toNote(item.key)"><span class="card-title" v-html="item.note.title"></span></a>
           </div>
         </v-card-title>
         <v-card-text class="card-content-text">
@@ -36,14 +35,14 @@
           </span>
         </v-card-text>
         <v-card-text class="card-note-link">
-          <a :href="getURL(item.key)">
+          <a @click="toNote(item.key)">
             もっとみる
           </a>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
           <div>
-            <v-icon>far fa-heart heart</v-icon>
+            <v-icon @click="like(item)">far fa-heart heart</v-icon>
             <span class="like-num">{{ item.note.like }}</span>
           </div>
           <v-spacer/>
@@ -69,7 +68,6 @@ export default {
     this.notesRef = this.database.ref('notes')
     this.notesRef.limitToLast(20).on('child_added', snapshot => {
       const ss = snapshot.val()
-      console.log(ss)
       var key = this.notes.push({
         key: ss.key,
         user: ss.user,
@@ -88,7 +86,25 @@ export default {
     },
     getURL (key) {
       return '/notes?ni=' + key
-    }
+    },
+    like (item) {
+      const key = item.key
+      var note = undefined
+      for (let i = 0; i < this.notes.length; i++) {
+        if (this.notes[i].key == item.key) {
+          this.notes[i]["note"]["like"] += 1
+          note = this.notes[i]
+        }
+      }
+      if (note) {
+        firebase.database().ref('notes/' + key).set(note)
+      }
+    },
+    toNote (key) {
+      this.setKey(key)
+      this.$router.push({ path: 'notes', query: { ni: key } })
+    },
+    ...mapActions(['setKey']),
   }
 }
 </script>
@@ -143,6 +159,8 @@ export default {
 }
 
 .like-num {
-  font-size: 16px;
+  padding-left: 3px;
+  font-size: 18px;
+  color: #777777
 }
 </style>

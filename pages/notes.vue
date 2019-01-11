@@ -35,6 +35,8 @@
 
 <script>
 import firebase from '~/plugins/firebase'
+import { mapState, mapGetters  } from 'vuex'
+
 export default {
   data () {
     return {
@@ -49,7 +51,10 @@ export default {
   created: function () {
     const database = firebase.database()
     const notesRef = database.ref('notes')
-    const key = this.$route.query.ni
+    var key = this.$route.query.ni
+    if (!key) {
+      key = this.key
+    }
     const _this = this
     const note = notesRef.child(key).once('value').then(
       function(snapshot) {
@@ -60,7 +65,7 @@ export default {
       }
     )
   },
-
+  computed: mapState(['key']),
 }
 </script>
 
