@@ -2,7 +2,7 @@
 
 > Browser based note app via NuxtJS and Firebase.
 
-![demo](https://media.giphy.com/media/TIegekvdcpV0NkXDl8/giphy.gif)
+![demo](https://media.giphy.com/media/TIegekvdcpV0NkXDl8/200w_d.gif)
 
 You can try on [demo site](https://not-note-ow971oxqk.now.sh/).
 However, a part of page could not be viewd since this project is using SSR mode.
